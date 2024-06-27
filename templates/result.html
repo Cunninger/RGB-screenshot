@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结果</title>
+    <style>
+        #copyButton {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        #copyButton:hover {
+            background-color: #0056b3;
+        }
+        #rgbValue {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>主色调</h1>
+    <p>上传图片的RGB颜色是: <span id="rgbValue">{{ color }}</span> <button id="copyButton">复制RGB</button></p>
+    <a href="{{ url_for('index') }}">上传另一张图片</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('copyButton').addEventListener('click', function() {
+                const rgbValue = document.getElementById('rgbValue').innerText;
+                const rgbNumbers = rgbValue.match(/\d+/g);
+                if (rgbNumbers && rgbNumbers.length === 3) {
+                    const rgbString = rgbNumbers.join(',');
+
+                    navigator.clipboard.writeText(rgbString).then(function() {
+                        alert('RGB颜色已复制到剪贴板: ' + rgbString);
+                    }).catch(function(err) {
+                        console.error('复制失败: ', err);
+                        alert('复制失败，请手动复制: ' + rgbString);
+                    });
+                } else {
+                    alert('无法提取有效的RGB值');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
